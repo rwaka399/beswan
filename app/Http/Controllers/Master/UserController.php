@@ -39,52 +39,45 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'      => 'required|string|max:255',
-            'email'     => 'required|email|unique:users',
-            'password'  => 'required|string|min:6',
-            'phone_number' => 'nullable|string|max:15',
-            'address'   => 'nullable|string|max:255',
-            'role_id'   => 'required|exists:roles,role_id'
+            'name'          => 'required|string|max:255',
+            'email'         => 'required|email|unique:users,email',
+            'password'      => 'nullable|string|min:6',
+            'phone_number'  => 'nullable|string|max:15',
+            'address'       => 'nullable|string|max:255',
+            'role_id'       => 'required|exists:roles,role_id',
         ]);
-
+    
         DB::beginTransaction();
+    
         try {
+            // Handle default password jika tidak diisi
+            $password = $request->filled('password') ? $request->password : 'admin';
+    
+            // Buat user
             $user = User::create([
                 'name'          => $request->name,
                 'email'         => $request->email,
-                'password'      => Hash::make($request->password),
+                'password'      => Hash::make($password),
                 'phone_number'  => $request->phone_number,
                 'address'       => $request->address,
-                'created_at'    => Carbon::now()->format('Y-m-d H:i:s'),
-                'created_by'    => Auth::user()->user_id
+                'created_by'    => Auth::user()->user_id ?? null,
+                'created_at'    => now(),
             ]);
-
-            // Jika ingin user punya lebih dari satu role
-
-            // if($request['role']) {
-            //     $data_role =[];
-            //     foreach (json_decode($request['role']) as $role_id) {
-            //         $data_role_user[] = [
-            //             'user_id'       => $user->user_id,
-            //             'role_id'       => $role_id,
-            //             'created_at'    => Carbon::now()->format('Y-m-d H:i:s'),
-            //             'created_by'    => auth()->user()->user_id
-            //         ];
-            //         array_push($data_role, $data_role_user);
-            //     }
-            //     UserRole::insert($data_role);
-            // }
-
+    
+            // Simpan role ke tabel user_roles
             UserRole::create([
-                'user_id'   => $user->user_id,
-                'role_id'   => $request->role_id
+                'user_id'       => $user->user_id,
+                'role_id'       => $request->role_id,
+                'created_by'    => Auth::user()->user_id ?? null,
+                'created_at'    => now(),
             ]);
-
+    
             DB::commit();
-            return redirect()->route('user-index')->with('success', 'User created successfully');
+    
+            return redirect()->route('user-index')->with('success', 'User berhasil ditambahkan.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'Failed to create user');
+            return back()->withErrors(['error' => 'Gagal menyimpan data: ' . $e->getMessage()]);
         }
     }
 

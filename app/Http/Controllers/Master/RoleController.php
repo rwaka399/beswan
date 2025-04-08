@@ -6,10 +6,17 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class RoleController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -36,21 +43,23 @@ class RoleController extends Controller
     {
         $request->validate([
             'role_name' => 'required|string|max:255|unique:roles',
-            'role_description' => 'nullable|string|max:255',
+            'role_description' => 'required|string|max:255',
         ]);
 
 
         DB::beginTransaction();
         try {
+            $userId = Auth::user()->user_id;
+
             Role::create([
                 'role_name' => $request->role_name,
                 'role_description' => $request->role_description,
-                'created_by' => auth()->user()->user_id,
+                'created_by' => $userId
             ]);
 
             DB::commit();
 
-            return redirect()->route('admin.role.index')->with('success', 'Role created successfully.');
+            return redirect()->route('role-index')->with('success', 'Role created successfully.');
         } catch (\Exception $e) {
             DB::rollback();
             return redirect()->back()->with('error', 'Failed to create role.');

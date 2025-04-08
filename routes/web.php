@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Master\RoleController;
 use App\Http\Controllers\Master\UserController;
 use App\Http\Controllers\ViewController;
 use Illuminate\Support\Facades\Route;
@@ -25,7 +26,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('login-post');
 
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
    
     Route::prefix('master')->group(function () {
         Route::get('/dashboard', [ViewController::class, 'admin_dashboard'])->name('admin-dashboard');
@@ -39,11 +40,18 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/store', [UserController::class, 'store'])->name('user-store');
             Route::get('/edit/{id}', [UserController::class, 'edit'])->name('user-edit');
             Route::put('/update/{id}', [UserController::class, 'update'])->name('user-update');
-            Route::get('/delete/{id}', [UserController::class, 'destroy'])->name('user-delete');
+            Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('user-delete');
         });
     
     
-        Route::prefix('role')->group(function () {});
+        Route::prefix('role')->group(function () {
+            Route::get('/', [RoleController::class, 'index'])->name('role-index');
+            Route::get('/create', [RoleController::class, 'create'])->name('role-create');
+            Route::post('/store', [RoleController::class, 'store'])->name('role-store');
+            Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('role-edit');
+            Route::put('/update/{id}', [RoleController::class, 'update'])->name('role-update');
+            Route::get('/delete/{id}', [RoleController::class, 'destroy'])->name('role-delete');
+        });
     
     
         Route::prefix('menu-master')->group(function () {});

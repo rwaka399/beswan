@@ -30,6 +30,7 @@ class AuthController extends Controller
             $user = Auth::user();
 
             Session::put('role_id', $user->role_id);
+            Session::put('user_id', $user->user_id);
 
             return redirect()->route('admin-dashboard')->with('success', 'Login successful');
     }
@@ -38,4 +39,12 @@ class AuthController extends Controller
             'error' => 'Invalid credentials'
         ]);
     }
+
+    public function logout()
+    {
+        Auth::logout();
+        Session::forget('role_id');
+        Session::flush();
+        return redirect()->route('login-page')->with('success', 'Logout successful');
+    }   
 }

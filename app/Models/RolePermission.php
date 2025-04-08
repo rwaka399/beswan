@@ -9,7 +9,15 @@ class RolePermission extends Model
 {
     use HasFactory;
     protected $primaryKey = "role_permission_id";
-    protected $guarded = [];
+    protected $fillable = [
+        'role_permission_id',
+        'role_id',
+        'menu_master_id',
+        'slug',
+        'value',
+        'created_by',
+        'updated_by'
+    ];
 
     public static function isHasPermission($role_id, $permission_slug):bool
     {;

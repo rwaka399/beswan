@@ -1,5 +1,5 @@
 @extends('admin.layout')
-@section('title', 'User Page | Index')
+@section('title', 'Role Page | Index')
 
 @section('content')
     <div class="app-content-header">
@@ -39,28 +39,21 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Role</th>
-                                        <th>Nomor Telp</th>
-                                        <th>Alamat</th>
+                                        <th>Role Name</th>
+                                        <th>Role Description</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($users as $user)
+                                    @foreach ($roles as $role)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $user->name }}</td>
-                                            <td>{{ $user->email }}</td>
-                                            @foreach ($user->userRole as $role)
-                                                <td>{{ $role->role->  role_name }}</td>
-                                            @endforeach
-                                            <td>{{ $user->phone_number }}</td>
-                                            <td>{{ $user->address }}</td>
+                                            <td>{{ $role->role_name }}</td>
+                                            <td>{{ $role->role_description }}</td>
+
                                             <td>
-                                                <a href="{{ route('user-edit', ['id' => $user->user_id]) }}" class="btn btn-primary">Edit</a>
-                                                <form action="{{ route('user-delete', ['id' => $user->user_id])}}" method="POST" style="display:inline;">
+                                                <a href="{{ route('role-edit', ['id' => $role->role_id]) }}" class="btn btn-primary">Edit</a>
+                                                <form action="" method="POST" style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger">Delete</button>
@@ -75,7 +68,7 @@
                         <!-- /.card-body -->
                         <div class="d-flex justify-content-between align-items-center"> 
                             <div>
-                                <button class="btn btn-primary"><a href="{{ route('user-create') }}" style="text-decoration: none; color:white;">Create User</a></button>
+                                <button class="btn btn-primary"><a href="{{ route('role-create') }}" style="text-decoration: none; color:white;">Create Role</a></button>
                             </div>
                             <div class="card-footer clearfix">
                                 <ul class="pagination pagination-sm m-0 float-end">

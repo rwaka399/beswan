@@ -12,7 +12,17 @@ class MenuMaster extends Model
 
     protected $primaryKey = 'menu_master_id';
 
-    protected $guarded = [];
+    protected $fillable = [
+        'menu_master_name',
+        'menu_master_type',
+        'menu_master_icon',
+        'menu_master_link',
+        'parent_id',
+        'menu_master_order',
+        'menu_master_slug',
+        'created_by',
+        'updated_by'
+    ];
 
     public function roleMenu():HasMany
     {

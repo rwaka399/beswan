@@ -297,7 +297,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('role-index') }}" class="nav-link">
                   <i class="nav-icon bi bi-box-arrow-in-right"></i>
                   <p>
                     Role
@@ -312,6 +312,18 @@
                   </p>
                 </a>
               </li>
+              <li class="nav-header">Auth</li>
+              <li class="nav-item">
+                <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                  <i class="nav-icon bi bi-box-arrow-in-right"></i>
+                  <p>Logout</p>
+                </a>
+              
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                  @csrf
+                </form>
+              </li>
+              
             </ul>
             <!--end::Sidebar Menu-->
           </nav>

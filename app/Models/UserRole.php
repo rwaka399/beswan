@@ -11,6 +11,7 @@ class UserRole extends Model
     use HasFactory;
 
     protected $primaryKey = 'user_role_id';
+    protected $fillable = ['user_id', 'role_id', 'created_by', 'updated_by'];
 
     public function user():BelongsTo
     {

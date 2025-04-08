@@ -12,7 +12,13 @@ class RoleMenu extends Model
 
     protected $primaryKey = 'role_menu_id';
 
-    protected $guarded = [];
+    protected $fillable = [
+        'role_menu_id',
+        'role_id',
+        'menu_master_id',
+        'created_by',
+        'updated_by',
+    ];
 
     public function role():BelongsTo
     {
