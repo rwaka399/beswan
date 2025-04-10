@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Master;
 use App\Http\Controllers\Controller;
 
 use App\Models\Role;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -23,7 +24,7 @@ class RoleController extends Controller
     public function index()
     {
         $roles = Role::all();
-        
+
         return view('admin.role.index', compact('roles'));
     }
 
@@ -32,7 +33,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        
+
         return view('admin.role.create');
     }
 
@@ -49,12 +50,10 @@ class RoleController extends Controller
 
         DB::beginTransaction();
         try {
-            $userId = Auth::user()->user_id;
-
             Role::create([
                 'role_name' => $request->role_name,
                 'role_description' => $request->role_description,
-                'created_by' => $userId
+                'created_by' => Auth::user()->user_id,
             ]);
 
             DB::commit();
@@ -69,47 +68,43 @@ class RoleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
-    {
-        $role = Role::findOrFail($id);
 
-        return view('admin.role.show', compact('role'));
-    }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Request $request)
+    public function edit($id)
     {
-        
+        $role = Role::findOrFail($id);
+
+        return view('admin.role.edit', compact('role'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         $request->validate([
-            'role_name' => 'required|string|max:255|unique:roles,role_name,' .$request->role_id . ',role_id',
+            'role_name' => 'required|string|max:255|unique:roles,role_name,' . $id . ',role_id',
             'role_description' => 'nullable|string|max:255',
         ]);
 
         DB::beginTransaction();
         try {
-            Role::where('role_id', $request->role_id)->update([
+            Role::where('role_id', $id)->update([
                 'role_name'         => $request->role_name,
                 'role_description'  => $request->role_description,
-                'updated_by'        => auth()->user()->user_id,
+                'updated_at'        => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_by'        => Auth::user()->user_id,
             ]);
 
             DB::commit();
-
-            return redirect()->route('admin.role.index')->with('success', 'Role updated successfully.');
+            return redirect()->route('role-index')->with('success', 'Role updated successfully.');
         } catch (\Exception $e) {
             DB::rollback();
             return redirect()->back()->with('error', 'Failed to update role.');
         }
-        return view('admin.role.edit', compact('role'));
     }
 
     /**
@@ -123,7 +118,7 @@ class RoleController extends Controller
 
             DB::commit();
 
-            return redirect()->route('admin.role.index')->with('success', 'Role deleted successfully.');
+            return redirect()->route('role-index')->with('success', 'Role deleted successfully.');
         } catch (\Exception $e) {
             DB::rollback();
             return redirect()->back()->with('error', 'Failed to delete role.');

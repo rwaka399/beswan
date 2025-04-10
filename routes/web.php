@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Master\RoleController;
 use App\Http\Controllers\Master\UserController;
 use App\Http\Controllers\ViewController;
@@ -18,11 +19,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('dashboard');
 });
+
+// Route::get('/')
 
 Route::get('/login-page', [AuthController::class, 'loginpage'])->name('login-page');
 Route::post('/login', [AuthController::class, 'login'])->name('login-post');
+Route::get('/register-page', [AuthController::class, 'registerpage'])->name('register-page');
+Route::post('/register', [AuthController::class, 'register'])->name('register-post');
 
 
 Route::middleware(['auth'])->group(function () {
@@ -50,7 +55,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/store', [RoleController::class, 'store'])->name('role-store');
             Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('role-edit');
             Route::put('/update/{id}', [RoleController::class, 'update'])->name('role-update');
-            Route::get('/delete/{id}', [RoleController::class, 'destroy'])->name('role-delete');
+            Route::delete('/delete/{id}', [RoleController::class, 'destroy'])->name('role-delete');
         });
     
     
