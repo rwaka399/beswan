@@ -17,17 +17,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -36,10 +25,7 @@
 
     <title>
 
-
-
         Material Kit 3 by Creative Tim
-
 
     </title>
 
@@ -721,24 +707,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                                     <!--   Core JS Files   -->
                                     <script src="{{ asset('cms2/assets/js/core/popper.min.js') }}" type="text/javascript"></script>
                                     <script src="{{ asset('cms2/assets/js/core/bootstrap.min.js') }}" type="text/javascript"></script>
@@ -818,32 +786,6 @@
                                             };
                                         }
                                     </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </body>
 
 </html>
