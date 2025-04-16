@@ -2,33 +2,36 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
-    use HasFactory;
-
-    protected $primaryKey = 'transaction_id';
+    protected $primaryKey = 'transaction_id'; // Sesuaikan primary key
 
     protected $fillable = [
-        'invoice_id',
-        'transaction_status',
-        'payment_type',
+        'external_id',
+        'lesson_package_id',
+        'user_id',
+        'amount',
+        'status',
         'payment_method',
-        'transaction_id_midtrans',
-        'order_id',
-        'fraud_status',
-        'gross_amount',
-        'payload',
+        'payer_email',
+        'description',
+        'invoice_url',
     ];
 
-    protected $casts = [
-        'payload' => 'array',
-    ];
-
-    public function invoice()
+    public function lessonPackage()
     {
-        return $this->belongsTo(Invoice::class, 'invoice_id');
+        return $this->belongsTo(LessonPackage::class, 'lesson_package_id', 'lesson_package_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'user_id');
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class, 'transaction_id', 'transaction_id');
     }
 }

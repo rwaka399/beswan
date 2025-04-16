@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Master\RoleController;
 use App\Http\Controllers\Master\UserController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ViewController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,9 +19,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('dashboard');
-});
+Route::get('/', [ViewController::class, 'home'])->name('home');
 
 // Route::get('/')
 
@@ -61,6 +60,16 @@ Route::middleware(['auth'])->group(function () {
     
         Route::prefix('menu-master')->group(function () {});
     });
+
+    Route::get('/packages', [TransactionController::class, 'listPackages'])->name('packages.index');
+    Route::get('/checkout/{lessonPackageId}', [TransactionController::class, 'showCheckout'])->name('checkout');
+    Route::post('/transaction/create', [TransactionController::class, 'createInvoice'])->name('transaction.create');
+    Route::get('/transaction/success', [TransactionController::class, 'success'])->name('transaction.success');
+    Route::get('/transaction/failed', [TransactionController::class, 'failed'])->name('transaction.failed');
+    Route::get('/keuangan/report', [TransactionController::class, 'financialReport'])->name('keuangan.report');
+    Route::get('/invoices/history', [TransactionController::class, 'invoiceHistory'])->name('invoices.history');
     
 
 });
+
+Route::post('/transaction/webhook', [TransactionController::class, 'handleWebhook'])->name('transaction.webhook');

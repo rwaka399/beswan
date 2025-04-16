@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('lesson_package_id');
             $table->string('lesson_package_name', 100)->nullable();
             $table->integer('lesson_duration')->nullable();
-            $table->integer('lesson_package_price')->nullable();
+            $table->unsignedInteger('lesson_package_price')->nullable();
 
             $table->timestamps();
 
